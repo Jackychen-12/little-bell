@@ -18,10 +18,14 @@
   <img src="assets/hero.gif" alt="Little Bell — desktop pet with remote mobile approve/deny for AI coding agents">
 </p>
 
+<p align="center">
+  <b><a href="#english">English</a></b> &nbsp;|&nbsp; <b><a href="#中文">中文</a></b>
+</p>
+
 ---
 
-<details open>
-<summary><b>English</b></summary>
+<details open id="english">
+<summary><h2>English</h2></summary>
 
 Little Bell lives on your desktop and reacts to what your AI coding agent is doing — in real time. But unlike other desktop pets, **when you walk away from your desk, Little Bell follows you to your phone**: permission requests push to your iPhone via Bark, and you can approve or deny without going back to your computer.
 
@@ -133,8 +137,8 @@ Settings → Remote → Webhook → enter your bot URL and body template.
 
 ---
 
-<details>
-<summary><b>中文</b></summary>
+<details id="中文">
+<summary><h2>中文</h2></summary>
 
 Little Bell 住在你的桌面上，实时响应 AI 编程 Agent 的状态。与其他桌面宠物不同的是，**当你离开电脑，Little Bell 会跟到你的手机上**——权限请求通过 Bark 推送到 iPhone，你可以直接在手机上批准或拒绝，不用跑回电脑。
 
