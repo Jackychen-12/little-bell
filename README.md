@@ -23,26 +23,11 @@ Little Bell lives on your desktop and reacts to what your AI coding agent is doi
 
 ---
 
-## What's New (vs Clawd on Desk)
+## Features
 
-| Feature | Clawd on Desk | Little Bell |
-|---------|:---:|:---:|
-| 12 animated states + 3 themes | ✅ | ✅ |
-| Multi-agent support (14 agents) | ✅ | ✅ |
-| Desktop permission bubbles | ✅ | ✅ |
-| Telegram remote approval | ✅ | ✅ |
-| **Bark push (iOS)** | - | **✅** |
-| **Mobile action page (approve/deny)** | - | **✅** |
-| **Rule engine (auto-allow/deny)** | - | **✅** |
-| **Webhook (Feishu/DingTalk/Slack/Discord)** | - | **✅** |
+### 📲 Remote Approve/Deny
 
-**One sentence: Little Bell = Clawd on Desk + remote control from your phone.**
-
----
-
-## Remote Approve/Deny
-
-The core enhancement. When an agent requests permission:
+When an agent requests permission, you don't need to be at your desk:
 
 ```
 Agent: "Bash: npm install"  → needs approval
@@ -58,7 +43,7 @@ You tap the notification → mobile action page opens
 Agent continues (or stops)
 ```
 
-### Rule Engine
+### 🛡️ Rule Engine
 
 Don't want to pull out your phone for every `git status`? Configure auto-allow/deny rules:
 
@@ -78,27 +63,30 @@ Auto-Deny:
 
 Matched operations are resolved instantly. Only unmatched requests reach your phone.
 
----
+### 📱 Multi-Channel Push
 
-## All Features (inherited from Clawd on Desk)
+- **Bark (iOS)** — push to iPhone with clickable action URL
+- **Webhook** — Feishu / DingTalk / Slack / Discord bot integration
+- **Telegram** — built-in Telegram approval bot
+- **macOS / Windows / Linux** — desktop notification + permission bubble
 
-### Animations & Interaction
+### 🎨 Animations & Interaction
 - **12 animated states** — idle, thinking, typing, building, subagent groove, juggling, error, happy, notification, sweeping, carrying, sleeping
 - **3 built-in themes** — Clawd (pixel crab), Calico (cat), Cloudling
 - **Eye tracking** — follows your cursor with body lean
 - **Click reactions** — double-click poke, 4-click flail
 - **Mini mode** — hides at screen edge with peek-on-hover
 
-### Permission Bubble
+### 💬 Permission Bubble
 - **Desktop floating card** — approve/deny without switching to terminal
 - **Global hotkeys** — `Ctrl+Shift+Y` Allow, `Ctrl+Shift+N` Deny
 - **Stacking layout** — multiple requests stack upward
 - **Auto-dismiss** — if you answer in terminal first
 
-### Multi-Agent Support
+### 🔗 Multi-Agent Support
 Claude Code, Codex CLI, Copilot CLI, Gemini CLI, Cursor Agent, CodeBuddy, Kiro CLI, Kimi CLI, Qwen Code, opencode, Pi, OpenClaw, Hermes — all supported with independent session tracking.
 
-### System
+### ⚙️ System
 - Click-through transparent areas
 - Position memory across restarts
 - Do Not Disturb mode
