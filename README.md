@@ -8,6 +8,10 @@
 </p>
 
 <p align="center">
+  <a href="README.zh-CN.md">中文版</a>
+</p>
+
+<p align="center">
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey" alt="Platform">
   <a href="https://github.com/Jackychen-12/little-bell/stargazers"><img src="https://img.shields.io/github/stars/Jackychen-12/little-bell?style=flat&logo=github&color=yellow" alt="Stars"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-blue" alt="License"></a>
