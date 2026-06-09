@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 480" width="1200" height="480">
+  <defs>
+    <linearGradient id="bgG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c0c14"/>
+      <stop offset="100%" stop-color="#14141f"/>
+    </linearGradient>
+    <linearGradient id="orangeG" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff8c42"/>
+      <stop offset="100%" stop-color="#ff6b35"/>
+    </linearGradient>
+    <linearGradient id="greenG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+    <linearGradient id="redG" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="480" fill="url(#bgG)"/>
+  <circle cx="200" cy="100" r="200" fill="#ff6b35" opacity="0.04"/>
+  <circle cx="1000" cy="400" r="250" fill="#a855f7" opacity="0.03"/>
+
+  <!-- Title area -->
+  <text x="80" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="800" fill="#f0f0f5">Little Bell</text>
+  <text x="80" y="115" font-family="system-ui, sans-serif" font-size="18" fill="#9ca3af">Desktop Pet + Remote Mobile Approve/Deny</text>
+
+  <!-- Step 1: Terminal -->
+  <rect x="80" y="155" width="260" height="130" rx="12" fill="#1a1a2a" stroke="#2a2a3a" stroke-width="1.5"/>
+  <circle cx="100" cy="175" r="5" fill="#ff5f57"/>
+  <circle cx="116" cy="175" r="5" fill="#febc2e"/>
+  <circle cx="132" cy="175" r="5" fill="#28c840"/>
+  <text x="170" y="179" font-family="monospace" font-size="11" fill="#6b7280">claude-code</text>
+  <text x="100" y="210" font-family="monospace" font-size="13" fill="#9ca3af">$ Bash: npm install</text>
+  <rect x="100" y="225" width="160" height="28" rx="6" fill="#ff6b35" opacity="0.15"/>
+  <text x="110" y="244" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#ff6b35">⚠ Needs your approval</text>
+  <text x="100" y="272" font-family="system-ui, sans-serif" font-size="11" fill="#4b5563">Agent is waiting...</text>
+
+  <!-- Arrow 1 -->
+  <line x1="350" y1="220" x2="410" y2="220" stroke="#ff6b35" stroke-width="2" stroke-dasharray="6,4"/>
+  <polygon points="410,215 420,220 410,225" fill="#ff6b35"/>
+
+  <!-- Step 2: Little Bell (center) -->
+  <rect x="430" y="145" width="200" height="150" rx="16" fill="#1a1a2a" stroke="#ff6b35" stroke-width="2" opacity="0.9"/>
+  <text x="530" y="185" text-anchor="middle" font-size="36">🔔</text>
+  <text x="530" y="215" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="700" fill="#f0f0f5">Little Bell</text>
+  <text x="530" y="237" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#9ca3af">Rule Engine check...</text>
+  <rect x="470" y="252" width="120" height="24" rx="6" fill="#ff6b35" opacity="0.15"/>
+  <text x="530" y="268" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" font-weight="600" fill="#ff6b35">→ Push to phone</text>
+
+  <!-- Arrow 2 (to desktop) -->
+  <line x1="530" y1="305" x2="530" y2="345" stroke="#a855f7" stroke-width="2" stroke-dasharray="6,4"/>
+  <polygon points="525,345 530,355 535,345" fill="#a855f7"/>
+
+  <!-- Desktop bubble -->
+  <rect x="450" y="360" width="160" height="70" rx="10" fill="#1a1a2a" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="530" y="388" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#a855f7">Desktop Bubble</text>
+  <rect x="470" y="398" width="50" height="20" rx="4" fill="#238636"/>
+  <text x="495" y="412" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#fff">Allow</text>
+  <rect x="526" y="398" width="50" height="20" rx="4" fill="#da3633"/>
+  <text x="551" y="412" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="600" fill="#fff">Deny</text>
+
+  <!-- Arrow 3 (to phone) -->
+  <line x1="640" y1="220" x2="700" y2="220" stroke="#ff6b35" stroke-width="2" stroke-dasharray="6,4"/>
+  <polygon points="700,215 710,220 700,225" fill="#ff6b35"/>
+
+  <!-- Step 3: Phone mockup -->
+  <rect x="720" y="120" width="180" height="310" rx="24" fill="#1a1a2a" stroke="#3a3a4a" stroke-width="2"/>
+  <rect x="770" y="130" width="80" height="16" rx="8" fill="#0c0c14"/>
+  <!-- Phone screen -->
+  <rect x="732" y="155" width="156" height="258" rx="4" fill="#0f0f1a"/>
+  <!-- Phone header -->
+  <text x="810" y="178" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#6b7280" letter-spacing="1">LITTLE BELL</text>
+  <!-- Permission card -->
+  <rect x="742" y="190" width="136" height="110" rx="8" fill="#1a1f36" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <rect x="752" y="200" width="36" height="16" rx="4" fill="#ff6b35"/>
+  <text x="770" y="212" text-anchor="middle" font-family="system-ui, sans-serif" font-size="8" font-weight="700" fill="#fff">Bash</text>
+  <text x="752" y="234" font-family="monospace" font-size="9" fill="#c9d1d9">npm install</text>
+  <text x="752" y="250" font-family="system-ui, sans-serif" font-size="8" fill="#6b7280">From Claude Code</text>
+  <!-- Approve/Deny buttons -->
+  <rect x="752" y="264" width="56" height="24" rx="6" fill="url(#greenG)"/>
+  <text x="780" y="280" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#fff">Approve</text>
+  <rect x="814" y="264" width="56" height="24" rx="6" fill="url(#redG)"/>
+  <text x="842" y="280" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#fff">Deny</text>
+  <!-- Tap indicator -->
+  <circle cx="780" cy="276" r="18" fill="#22c55e" opacity="0.2" filter="url(#glow)"/>
+  <!-- Second card faded -->
+  <rect x="742" y="310" width="136" height="40" rx="8" fill="#1a1f36" opacity="0.4"/>
+  <rect x="752" y="318" width="30" height="12" rx="3" fill="#a855f7" opacity="0.6"/>
+  <text x="786" y="328" font-family="system-ui, sans-serif" font-size="8" fill="#6b7280" opacity="0.6">Edit: src/main.js</text>
+  <!-- Phone bottom bar -->
+  <rect x="780" y="400" width="60" height="4" rx="2" fill="#3a3a4a"/>
+
+  <!-- Arrow 4 (back) -->
+  <line x1="720" y1="380" x2="350" y2="380" stroke="#22c55e" stroke-width="2" stroke-dasharray="6,4"/>
+  <polygon points="350,375 340,380 350,385" fill="#22c55e"/>
+
+  <!-- Result text -->
+  <rect x="140" y="355" width="200" height="50" rx="10" fill="#0a2010" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="240" y="376" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#22c55e">✅ Approved → Agent continues</text>
+  <text x="240" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#6b7280">You didn't leave the couch</text>
+
+  <!-- Feature pills at bottom right -->
+  <rect x="940" y="155" width="200" height="36" rx="8" fill="#1a1a2a" stroke="#2a2a3a" stroke-width="1"/>
+  <text x="960" y="178" font-family="system-ui, sans-serif" font-size="13" fill="#ff6b35">📲</text>
+  <text x="982" y="178" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#f0f0f5">Remote Approve/Deny</text>
+
+  <rect x="940" y="201" width="200" height="36" rx="8" fill="#1a1a2a" stroke="#2a2a3a" stroke-width="1"/>
+  <text x="960" y="224" font-family="system-ui, sans-serif" font-size="13" fill="#22c55e">🛡️</text>
+  <text x="982" y="224" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#f0f0f5">Rule Engine</text>
+
+  <rect x="940" y="247" width="200" height="36" rx="8" fill="#1a1a2a" stroke="#2a2a3a" stroke-width="1"/>
+  <text x="960" y="270" font-family="system-ui, sans-serif" font-size="13" fill="#a855f7">🎨</text>
+  <text x="982" y="270" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#f0f0f5">12 Animations</text>
+
+  <rect x="940" y="293" width="200" height="36" rx="8" fill="#1a1a2a" stroke="#2a2a3a" stroke-width="1"/>
+  <text x="960" y="316" font-family="system-ui, sans-serif" font-size="13" fill="#3b82f6">📡</text>
+  <text x="982" y="316" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#f0f0f5">Bark / Telegram / Webhook</text>
+
+  <rect x="940" y="339" width="200" height="36" rx="8" fill="#1a1a2a" stroke="#2a2a3a" stroke-width="1"/>
+  <text x="960" y="362" font-family="system-ui, sans-serif" font-size="13" fill="#f59e0b">🔗</text>
+  <text x="982" y="362" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#f0f0f5">14 Agents Supported</text>
+
+  <!-- Subtitle -->
+  <text x="940" y="420" font-family="system-ui, sans-serif" font-size="11" fill="#4b5563">Based on Clawd on Desk · Enhanced with remote control</text>
+</svg>

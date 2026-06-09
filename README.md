@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/tray-icon.png" width="128" alt="Little Bell">
+  <img src="assets/little-bell-icon.svg" width="128" alt="Little Bell">
 </p>
 <h1 align="center">Little Bell 小铃铛</h1>
 <p align="center">
@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/hero.gif" alt="Little Bell — desktop pet with remote mobile approve/deny for AI coding agents">
+  <img src="assets/hero-banner.svg" alt="Little Bell — Terminal → Little Bell → Phone approve/deny → Agent continues" width="100%">
 </p>
 
 <p align="center">

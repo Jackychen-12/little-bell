@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ff8c42"/>
+      <stop offset="100%" stop-color="#ff6b35"/>
+    </linearGradient>
+    <linearGradient id="bell" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="100%" stop-color="#f0e6d0"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <!-- Bell body -->
+  <path d="M128 48c-8 0-14 6-14 14v6c-24 6-42 28-42 54v30c0 8-4 16-10 20h132c-6-4-10-12-10-20v-30c0-26-18-48-42-54v-6c0-8-6-14-14-14z" fill="url(#bell)" opacity="0.95"/>
+  <!-- Bell bottom rim -->
+  <rect x="72" y="172" width="112" height="8" rx="4" fill="#fff" opacity="0.9"/>
+  <!-- Clapper -->
+  <circle cx="128" cy="192" r="12" fill="#fff" opacity="0.9"/>
+  <!-- Notification dot -->
+  <circle cx="176" cy="72" r="20" fill="#ff3b30"/>
+  <text x="176" y="79" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="20" fill="#fff">!</text>
+  <!-- Signal waves -->
+  <path d="M80 90c-8-12-12-26-12-42" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <path d="M68 98c-12-16-18-36-18-58" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.3"/>
+  <path d="M176 90c8-12 12-26 12-42" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" opacity="0.5"/>
+  <path d="M188 98c12-16 18-36 18-58" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.3"/>
+</svg>
