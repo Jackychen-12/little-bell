@@ -280,6 +280,18 @@ function handlePermissionPost(req, res, options) {
     const recordRequestHookEvent = createRequestHookRecorder(data, "permission");
     const { agentId } = resolveHookAgentId(data);
 
+    // ── Rule engine: auto-allow/deny matching operations ──
+    if (typeof ctx.evaluateRule === "function") {
+      const toolName = data.tool || data.toolName || data.tool_name || "unknown";
+      const toolInput = data.input || data.toolInput || data.tool_input || {};
+      const ruleDecision = ctx.evaluateRule(toolName, toolInput);
+      if (ruleDecision) {
+        ctx.permLog(`rule-engine auto-${ruleDecision}: ${toolName}`);
+        ctx.sendPermissionResponse(res, ruleDecision);
+        return;
+      }
+    }
+
     try {
       // ── opencode branch ──
       // opencode plugin (agents/opencode.js) posts fire-and-forget. We

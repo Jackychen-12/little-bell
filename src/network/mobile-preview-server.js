@@ -105,6 +105,29 @@ function initMobilePreviewServer(ctx) {
       return;
     }
 
+    // ── Action routes: mobile approve/deny (little-bell enhancement) ──
+    const actionMatch = urlPath.match(/^\/action\/(\w+)$/);
+    if (actionMatch) {
+      res.writeHead(200, { "Content-Type": "text/html; charset=utf-8" });
+      res.end(buildActionPage(actionMatch[1], getLocalIP(), activePort));
+      return;
+    }
+    const approveMatch = urlPath.match(/^\/action\/(\w+)\/(approve|deny)$/);
+    if (approveMatch && req.method === "POST") {
+      const [, actionId, decision] = approveMatch;
+      const resolved = resolveActionFromMobile(actionId, decision === "approve" ? "allow" : "deny");
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ ok: resolved }));
+      return;
+    }
+    const actionsListMatch = urlPath === "/actions";
+    if (actionsListMatch) {
+      const pending = getPendingActionsForMobile();
+      res.writeHead(200, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ pending }));
+      return;
+    }
+
     if (urlPath === "/mobile/" || urlPath === "/mobile") urlPath = "/mobile/index.html";
     if (!urlPath.startsWith("/mobile/")) { res.writeHead(404); res.end(); return; }
     const rel = urlPath.slice("/mobile/".length);
@@ -331,4 +354,74 @@ function initMobilePreviewServer(ctx) {
   };
 }
 
-module.exports = { initMobilePreviewServer, PROTOCOL_VERSION };
+// ── Mobile action approval helpers (little-bell enhancement) ──
+
+const mobileActionCallbacks = new Map();
+
+function registerMobileActionCallback(actionId, callback) {
+  mobileActionCallbacks.set(actionId, callback);
+  setTimeout(() => mobileActionCallbacks.delete(actionId), 300000);
+}
+
+function resolveActionFromMobile(actionId, decision) {
+  const cb = mobileActionCallbacks.get(actionId);
+  if (!cb) return false;
+  mobileActionCallbacks.delete(actionId);
+  try { cb(decision); } catch {}
+  return true;
+}
+
+function getPendingActionsForMobile() {
+  return Array.from(mobileActionCallbacks.keys()).map((id) => ({ id }));
+}
+
+function buildActionPage(actionId, lanIp, port) {
+  return `<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Little Bell - Permission</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #0f0f1a; color: #eee; min-height: 100vh; padding: 16px; display: flex; align-items: center; justify-content: center; }
+.card { background: #1a1f36; border-radius: 16px; padding: 24px 20px; max-width: 420px; width: 100%; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.badge { background: #ff6b35; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+h1 { font-size: 18px; color: #fff; }
+.loading { text-align: center; color: #8b949e; padding: 20px; }
+.buttons { display: flex; gap: 10px; margin-top: 16px; }
+.btn { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.btn:active { transform: scale(0.96); opacity: 0.9; }
+.btn-approve { background: #238636; color: #fff; }
+.btn-deny { background: #da3633; color: #fff; }
+.result { text-align: center; padding: 40px 20px; }
+.result-icon { font-size: 48px; margin-bottom: 12px; }
+.result-text { font-size: 18px; font-weight: 600; }
+.result-hint { color: #8b949e; margin-top: 8px; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="card" id="main">
+  <div class="header">
+    <span class="badge">Permission</span>
+    <h1>Agent requests approval</h1>
+  </div>
+  <p style="color:#8b949e;font-size:13px;margin-bottom:8px">Action ID: ${actionId}</p>
+  <div class="buttons">
+    <button class="btn btn-approve" onclick="decide('approve')">Approve</button>
+    <button class="btn btn-deny" onclick="decide('deny')">Deny</button>
+  </div>
+</div>
+<script>
+function decide(action) {
+  fetch('/action/${actionId}/' + action, {method:'POST'}).then(r => r.json()).then(d => {
+    document.getElementById('main').innerHTML = '<div class="result"><div class="result-icon">' + (action==='approve'?'\\u2705':'\\u274C') + '</div><div class="result-text">' + (action==='approve'?'Approved':'Denied') + '</div><div class="result-hint">You can close this page</div></div>';
+  }).catch(() => { alert('Network error'); });
+}
+</script>
+</body>
+</html>`;
+}
+
+module.exports = { initMobilePreviewServer, PROTOCOL_VERSION, registerMobileActionCallback, resolveActionFromMobile };

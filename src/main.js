@@ -1452,6 +1452,15 @@ const _serverCtx = {
   maybeStartRemoteApproval,
   replyOpencodePermission,
   permLog,
+  evaluateRule: (toolName, toolInput) => {
+    const rulePrefs = _settingsController.get("ruleEngine");
+    if (!rulePrefs || !rulePrefs.enabled) return null;
+    const { RuleEngine } = require("./rule-engine");
+    const engine = new RuleEngine({ auto_allow: rulePrefs.autoAllow, auto_deny: rulePrefs.autoDeny });
+    return engine.evaluate(toolName, toolInput);
+  },
+  getPrefs: () => _settingsController.getSnapshot(),
+  getMobilePreviewPort: () => _lanWss && typeof _lanWss.getPort === "function" ? _lanWss.getPort() : 23334,
 };
 const _server = require("./server")(_serverCtx);
 const { startHttpServer, getHookServerPort } = _server;

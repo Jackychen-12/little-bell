@@ -263,6 +263,62 @@ const SCHEMA = {
     defaultFactory: () => ({ ...DEFAULT_HARDWARE_BUDDY_SETTINGS }),
     normalize: normalizeHardwareBuddySettings,
   },
+  barkApproval: {
+    type: "object",
+    defaultFactory: () => ({
+      enabled: false,
+      server: "https://api.day.app",
+      deviceKey: "",
+    }),
+    normalize: (value) => {
+      if (!value || typeof value !== "object") {
+        return { enabled: false, server: "https://api.day.app", deviceKey: "" };
+      }
+      return {
+        enabled: typeof value.enabled === "boolean" ? value.enabled : false,
+        server: typeof value.server === "string" && value.server ? value.server : "https://api.day.app",
+        deviceKey: typeof value.deviceKey === "string" ? value.deviceKey : "",
+      };
+    },
+  },
+  webhookNotify: {
+    type: "object",
+    defaultFactory: () => ({
+      enabled: false,
+      url: "",
+      method: "POST",
+      bodyTemplate: "",
+    }),
+    normalize: (value) => {
+      if (!value || typeof value !== "object") {
+        return { enabled: false, url: "", method: "POST", bodyTemplate: "" };
+      }
+      return {
+        enabled: typeof value.enabled === "boolean" ? value.enabled : false,
+        url: typeof value.url === "string" ? value.url : "",
+        method: typeof value.method === "string" ? value.method : "POST",
+        bodyTemplate: typeof value.bodyTemplate === "string" ? value.bodyTemplate : "",
+      };
+    },
+  },
+  ruleEngine: {
+    type: "object",
+    defaultFactory: () => ({
+      enabled: false,
+      autoAllow: ["Read", "Bash:ls *", "Bash:git status", "Bash:git diff*"],
+      autoDeny: ["Bash:rm -rf /*", "Bash:sudo *"],
+    }),
+    normalize: (value) => {
+      if (!value || typeof value !== "object") {
+        return { enabled: false, autoAllow: [], autoDeny: [] };
+      }
+      return {
+        enabled: typeof value.enabled === "boolean" ? value.enabled : false,
+        autoAllow: Array.isArray(value.autoAllow) ? value.autoAllow.filter((r) => typeof r === "string") : [],
+        autoDeny: Array.isArray(value.autoDeny) ? value.autoDeny.filter((r) => typeof r === "string") : [],
+      };
+    },
+  },
   // Background update-check toggle. When true, the scheduler in updater.js
   // runs a quiet GitHub discovery on a 12-hour cycle (packaged builds only).
   // Default on per #329.

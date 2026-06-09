@@ -950,61 +950,117 @@ function dismissPermissionForTerminal(perm) {
 
 function maybeStartRemoteApproval(permEntry) {
   if (!isRemoteApprovalActionable(permEntry)) return false;
+
+  let started = false;
+
+  // ── Bark push notification (little-bell enhancement) ──
+  started = maybeStartBarkApproval(permEntry) || started;
+
+  // ── Telegram remote approval (original) ──
   const client = getTelegramApprovalClient();
-  if (!client || typeof client.requestApproval !== "function") return false;
-  if (typeof client.isEnabled === "function" && !client.isEnabled()) return false;
+  if (client && typeof client.requestApproval === "function" && (!client.isEnabled || client.isEnabled())) {
+    const payload = buildRemoteApprovalPayload(permEntry);
+    if (payload) {
+      const controller = typeof AbortController === "function" ? new AbortController() : null;
+      if (controller) permEntry.remoteApprovalAbortController = controller;
 
-  const payload = buildRemoteApprovalPayload(permEntry);
-  if (!payload) return false;
+      let request;
+      try {
+        request = client.requestApproval(
+          payload,
+          controller ? { signal: controller.signal } : {}
+        );
+      } catch (err) {
+        if (controller && permEntry.remoteApprovalAbortController === controller) {
+          permEntry.remoteApprovalAbortController = null;
+        }
+        permLog(`telegram remote approval failed: ${compactRemoteApprovalText(err && err.message ? err.message : err, 200)}`);
+      }
 
-  const controller = typeof AbortController === "function" ? new AbortController() : null;
-  if (controller) permEntry.remoteApprovalAbortController = controller;
-
-  let request;
-  try {
-    request = client.requestApproval(
-      payload,
-      controller ? { signal: controller.signal } : {}
-    );
-  } catch (err) {
-    if (controller && permEntry.remoteApprovalAbortController === controller) {
-      permEntry.remoteApprovalAbortController = null;
+      if (request) {
+        started = true;
+        Promise.resolve(request)
+          .then((decision) => {
+            const normalized = normalizeRemoteApprovalDecision(decision);
+            if (!normalized) {
+              if (decision) permLog(`telegram remote approval ignored decision=${compactRemoteApprovalText(decision, 40)}`);
+              return;
+            }
+            if (pendingPermissions.indexOf(permEntry) === -1) return;
+            if (normalized.action === "allow" || normalized.action === "deny") {
+              resolvePermissionEntry(permEntry, normalized.action);
+              return;
+            }
+            if (!isRemoteRichApprovalSupported(permEntry)) {
+              permLog(`telegram remote approval ignored rich decision for agent=${compactRemoteApprovalText(permEntry.agentId || "unknown", 80)}`);
+              return;
+            }
+            if (!applyPermissionSuggestion(permEntry, normalized.index, { requireResolved: true })) {
+              permLog(`telegram remote approval ignored invalid suggestion index=${normalized.index}`);
+              return;
+            }
+            resolvePermissionEntry(permEntry, "allow");
+          })
+          .catch((err) => {
+            permLog(`telegram remote approval failed: ${compactRemoteApprovalText(err && err.message ? err.message : err, 200)}`);
+          })
+          .finally(() => {
+            if (controller && permEntry.remoteApprovalAbortController === controller) {
+              permEntry.remoteApprovalAbortController = null;
+            }
+          });
+      }
     }
-    permLog(`telegram remote approval failed: ${compactRemoteApprovalText(err && err.message ? err.message : err, 200)}`);
-    return false;
   }
 
-  Promise.resolve(request)
-    .then((decision) => {
-      const normalized = normalizeRemoteApprovalDecision(decision);
-      if (!normalized) {
-        if (decision) permLog(`telegram remote approval ignored decision=${compactRemoteApprovalText(decision, 40)}`);
-        return;
-      }
-      if (pendingPermissions.indexOf(permEntry) === -1) return;
-      if (normalized.action === "allow" || normalized.action === "deny") {
-        resolvePermissionEntry(permEntry, normalized.action);
-        return;
-      }
-      if (!isRemoteRichApprovalSupported(permEntry)) {
-        permLog(`telegram remote approval ignored rich decision for agent=${compactRemoteApprovalText(permEntry.agentId || "unknown", 80)}`);
-        return;
-      }
-      if (!applyPermissionSuggestion(permEntry, normalized.index, { requireResolved: true })) {
-        permLog(`telegram remote approval ignored invalid suggestion index=${normalized.index}`);
-        return;
-      }
-      resolvePermissionEntry(permEntry, "allow");
-    })
-    .catch((err) => {
-      permLog(`telegram remote approval failed: ${compactRemoteApprovalText(err && err.message ? err.message : err, 200)}`);
-    })
-    .finally(() => {
-      if (controller && permEntry.remoteApprovalAbortController === controller) {
-        permEntry.remoteApprovalAbortController = null;
-      }
+  return started;
+}
+
+function maybeStartBarkApproval(permEntry) {
+  const { BarkNotifier, WebhookNotifier, buildPermissionTitle, buildPermissionBody } = require("./bark-notifier");
+
+  const barkPrefs = typeof ctx.getPrefs === "function" ? (ctx.getPrefs().barkApproval || {}) : {};
+  const webhookPrefs = typeof ctx.getPrefs === "function" ? (ctx.getPrefs().webhookNotify || {}) : {};
+
+  const bark = barkPrefs.enabled ? new BarkNotifier({ server: barkPrefs.server, deviceKey: barkPrefs.deviceKey }) : null;
+  const webhook = webhookPrefs.enabled ? new WebhookNotifier({ url: webhookPrefs.url, method: webhookPrefs.method, bodyTemplate: webhookPrefs.bodyTemplate }) : null;
+
+  if (!bark && !webhook) return false;
+
+  const title = buildPermissionTitle(permEntry);
+  const body = buildPermissionBody(permEntry);
+  const actionUrl = buildMobileActionUrl(permEntry);
+
+  if (bark && bark.isEnabled()) {
+    bark.send(`Agent: ${title}`, body, actionUrl).then((ok) => {
+      permLog(`bark push ${ok ? "ok" : "failed"}: ${title}`);
+    }).catch((err) => {
+      permLog(`bark push error: ${err && err.message}`);
     });
+  }
+
+  if (webhook && webhook.isEnabled()) {
+    webhook.send(`Agent: ${title}`, body).catch((err) => {
+      permLog(`webhook push error: ${err && err.message}`);
+    });
+  }
+
   return true;
+}
+
+function buildMobileActionUrl(permEntry) {
+  const os = require("os");
+  const nets = os.networkInterfaces();
+  let lanIp = "127.0.0.1";
+  for (const iface of Object.values(nets)) {
+    for (const alias of (iface || [])) {
+      if (alias.family === "IPv4" && !alias.internal) { lanIp = alias.address; break; }
+    }
+    if (lanIp !== "127.0.0.1") break;
+  }
+  const port = typeof ctx.getMobilePreviewPort === "function" ? ctx.getMobilePreviewPort() : 23334;
+  const permId = permEntry.createdAt || Date.now();
+  return `http://${lanIp}:${port}/action/${permId}`;
 }
 
 function applyPermissionSuggestion(perm, index, options = {}) {

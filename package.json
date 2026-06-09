@@ -1,7 +1,7 @@
 {
-  "name": "clawd-on-desk",
-  "version": "0.9.0",
-  "description": "A desktop pet that reacts to your Claude Code sessions in real-time.",
+  "name": "little-bell",
+  "version": "1.0.0",
+  "description": "Desktop pet + remote mobile approve/deny for AI coding agents. Fork of clawd-on-desk with Bark push, rule engine, and webhook notifications.",
   "main": "src/main.js",
   "scripts": {
     "start": "node scripts/ensure-sidecar-binaries.js && node launch.js",
